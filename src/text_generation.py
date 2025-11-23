@@ -1,0 +1,30 @@
+from transformers import pipeline
+from pathlib import Path
+
+# 1. Tải pipeline "text-generation"
+# Pipeline này sẽ tự động tải một mô hình phù hợp (thường là GPT-2)
+generator = pipeline("text-generation")
+
+# 2. Đoạn văn bản mồi
+prompt = "The best thing about learning NLP is"
+
+# 3. Sinh văn bản
+# max_length: tổng độ dài của câu mồi và phần được sinh ra
+# num_return_sequences: số lượng chuỗi kết quả muốn nhận
+generated_texts = generator(prompt, max_length=50, num_return_sequences=1)
+
+# 4. In kết quả
+print(f"Câu mồi: '{prompt}'")
+for text in generated_texts:
+    print("Văn bản được sinh ra:")
+    print(text['generated_text'])
+    
+results_dir = Path(__file__).resolve().parents[1] / "results"
+results_dir.mkdir(parents=True, exist_ok=True)
+lines = [f"Câu mồi: '{prompt}'"]
+for text in generated_texts:
+    lines.append("Văn bản được sinh ra:")
+    lines.append(text['generated_text'])
+out_file = results_dir / "text_generation.txt"
+with out_file.open("w", encoding="utf-8") as f:
+    f.write("\n".join(lines))
