@@ -1,1 +1,0 @@
-# lab6_22001661_VuongSyViet
